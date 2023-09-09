@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 
 import Header from './components/Header';
 import InputForm from './components/InputForm';
-import DataTable from './components/DataTable';
+import DataTable from './components/DataTable/DataTable';
 function App() {
-  const [formData, setFormData] = useState({
-    currentSavings: null,
-    yearlyContribution: null,
-    expectedReturn: null,
-    duration: null,
-  });
+  const [resultData, setResultData] = useState([]);
 
   const calculateHandler = (userInput) => {
     // Should be triggered when form is submitted
@@ -17,9 +12,9 @@ function App() {
 
     const yearlyData = []; // per-year results
 
-    let currentSavings = +userInput['current-savings']; // feel free to change the shape of this input object!
-    const yearlyContribution = +userInput['yearly-contribution']; // as mentioned: feel free to change the shape...
-    const expectedReturn = +userInput['expected-return'] / 100;
+    let currentSavings = +userInput['currentSavings']; // feel free to change the shape of this input object!
+    const yearlyContribution = +userInput['yearlyContribution']; // as mentioned: feel free to change the shape...
+    const expectedReturn = +userInput['expectedReturn'] / 100;
     const duration = +userInput['duration'];
 
     // The below code calculates yearly results (total savings, interest etc)
@@ -36,15 +31,23 @@ function App() {
     }
 
     // do something with yearlyData ...
+    setResultData(yearlyData);
+  };
+
+  const clearTableHandler = () => {
+    setResultData([]);
   };
 
   return (
     <div>
       <Header />
-      <InputForm />
+      <InputForm
+        onSubmitForm={calculateHandler}
+        onResetForm={clearTableHandler}
+      />
       {/* Todo: Show below table conditionally (only once result data is available) */}
       {/* Show fallback text if no data is available */}
-      <DataTable />
+      <DataTable results={resultData} />
     </div>
   );
 }
