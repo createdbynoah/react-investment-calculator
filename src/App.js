@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import Header from './components/Header';
-import InputForm from './components/InputForm';
+import Header from './components/Header/Header';
+import InputForm from './components/InputForm/InputForm';
 import DataTable from './components/DataTable/DataTable';
 function App() {
   const [resultData, setResultData] = useState([]);
