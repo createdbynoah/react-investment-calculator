@@ -7,7 +7,10 @@ function DataTable(props) {
   return (
     <table className="result">
       <TableHeader />
-      <TableBody items={props.results} />
+      <TableBody
+        items={props.results}
+        initialInvestment={props.initialInvestment}
+      />
     </table>
   );
 }

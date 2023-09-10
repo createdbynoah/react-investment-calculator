@@ -5,15 +5,14 @@ import InputForm from './components/InputForm';
 import DataTable from './components/DataTable/DataTable';
 function App() {
   const [resultData, setResultData] = useState([]);
+  const [userInput, setUserInput] = useState(null);
 
   const calculateHandler = (userInput) => {
-    // Should be triggered when form is submitted
-    // You might not directly want to bind it to the submit event on the form though...
+    setUserInput(userInput);
+    const yearlyData = [];
 
-    const yearlyData = []; // per-year results
-
-    let currentSavings = +userInput['currentSavings']; // feel free to change the shape of this input object!
-    const yearlyContribution = +userInput['yearlyContribution']; // as mentioned: feel free to change the shape...
+    let currentSavings = +userInput['currentSavings'];
+    const yearlyContribution = +userInput['yearlyContribution'];
     const expectedReturn = +userInput['expectedReturn'] / 100;
     const duration = +userInput['duration'];
 
@@ -22,7 +21,6 @@ function App() {
       const yearlyInterest = currentSavings * expectedReturn;
       currentSavings += yearlyInterest + yearlyContribution;
       yearlyData.push({
-        // feel free to change the shape of the data pushed to the array!
         year: i + 1,
         yearlyInterest: yearlyInterest,
         savingsEndOfYear: currentSavings,
@@ -30,12 +28,12 @@ function App() {
       });
     }
 
-    // do something with yearlyData ...
     setResultData(yearlyData);
   };
 
   const clearTableHandler = () => {
-    setResultData([]);
+    setUserInput(null);
+    setResultData(null);
   };
 
   return (
@@ -45,9 +43,13 @@ function App() {
         onSubmitForm={calculateHandler}
         onResetForm={clearTableHandler}
       />
-      {/* Todo: Show below table conditionally (only once result data is available) */}
-      {/* Show fallback text if no data is available */}
-      <DataTable results={resultData} />
+      {!userInput && <p className="message">Please enter your data</p>}
+      {userInput && (
+        <DataTable
+          results={resultData}
+          initialInvestment={userInput.currentSavings}
+        />
+      )}
     </div>
   );
 }
